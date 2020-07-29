@@ -27,3 +27,53 @@ public:
             
     }
 };
+
+______________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+class Solution {
+public:
+    int candidate(vector <int> A , int n)
+    {
+        int max_index=0,count=1;
+        for(int i=1;i<n;i++)
+        {
+            if(A[max_index] == A[i])
+                count++;
+            else
+                count--;
+            
+            if(count == 0)
+            {max_index=i;
+             count=1;
+            }
+        }
+        
+        return A[max_index];
+    }
+    
+    int isMajority(vector <int> A , int n , int cand)
+    {
+        int c=0;
+        for(int i=0;i<n;i++)
+        {
+            if(cand == A[i])
+                c++;
+            
+            if(c > n/2)
+                return 1;
+        }
+        
+        return 0;
+    }
+    
+    int majorityElement(vector<int>& nums) {
+      
+        int cand = candidate(nums,nums.size());
+    
+            if(isMajority(nums,nums.size(),cand))
+                return cand;
+        
+        return -1;
+            
+    }
+};
