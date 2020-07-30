@@ -56,5 +56,58 @@ public:
         }
         
         return head;
+        
+        __________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+        
+        
+        /**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& A) {
+        priority_queue< pair<int,int>  , vector <pair<int,int> > , greater<pair<int,int> > > pq;
+        
+        for(int i=0;i<A.size();i++)
+        {
+            if(A[i]!=NULL)
+                pq.push({A[i]->val , i});
+        }
+        
+        ListNode *head =NULL,*r=NULL;
+        
+        if(pq.empty())
+            return head;
+        
+        while(!pq.empty())
+        {
+            auto t = pq.top();
+            pq.pop();
+            ListNode *p = new ListNode(t.first);
+            A[t.second] = A[t.second]->next;
+            if(A[t.second] !=NULL)
+                pq.push({A[t.second]->val , t.second});
+            
+            if(head == NULL)
+                head =r=p;
+            
+            else
+            {
+                r->next=p;
+                r=r->next;
+            }
+            
+        }
+        
+        return head;
+    }
+};
     }
 };
