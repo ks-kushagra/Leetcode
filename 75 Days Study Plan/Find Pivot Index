@@ -1,0 +1,122 @@
+Given an array of integers nums, calculate the pivot index of this array.
+
+The pivot index is the index where the sum of all the numbers strictly to the left of the index is equal to the sum of all the numbers strictly to the index's right.
+
+If the index is on the left edge of the array, then the left sum is 0 because there are no elements to the left. This also applies to the right edge of the array.
+
+Return the leftmost pivot index. If no such index exists, return -1.
+
+ 
+
+Example 1:
+
+Input: nums = [1,7,3,6,5,6]
+Output: 3
+Explanation:
+The pivot index is 3.
+Left sum = nums[0] + nums[1] + nums[2] = 1 + 7 + 3 = 11
+Right sum = nums[4] + nums[5] = 5 + 6 = 11
+Example 2:
+
+Input: nums = [1,2,3]
+Output: -1
+Explanation:
+There is no index that satisfies the conditions in the problem statement.
+Example 3:
+
+Input: nums = [2,1,-1]
+Output: 0
+Explanation:
+The pivot index is 0.
+Left sum = 0 (no elements to the left of index 0)
+Right sum = nums[1] + nums[2] = 1 + -1 = 0
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+-1000 <= nums[i] <= 1000
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+/*
+1 7 3 6 5 6
+
+left sum = 1  8  11  17  22  28
+rightsum = 28 27 20  17  11  6
+
+i = 0 
+left sum of i = left[i-1]  = (index out of bound = 0)
+right sumof i = right[i+1] = 27
+
+i = 1
+left sum of i = left[i-1]  = 1
+right sumof i = right[i+1] = 20
+
+i = 2
+left sum of i = left[i-1]  = 8
+right sumof i = right[i+1] = 17
+
+i = 3
+left sum of i = left[i-1]  = 11
+right sumof i = right[i+1] = 11  --- ANS
+
+i = 4
+left sum of i = left[i-1]  = 17
+right sumof i = right[i+1] = 6
+
+i = 5
+left sum of i = left[i-1]  = 22
+right sumof i = right[i+1] = (index out of bound = 0)
+*/
+
+class Solution {
+public:
+    void populateLeftSum(vector<int> &leftSum , vector<int> nums){
+        int size = nums.size();
+        leftSum[0]=nums[0];
+        for(int i=1;i<size;i++){
+            leftSum[i] = leftSum[i-1]+nums[i];
+        }
+    }
+
+    void populateRightSum(vector<int> &rightSum , vector<int> nums){
+        int size = nums.size();
+        rightSum[size-1]=nums[size-1];
+        for(int i=size-2;i>=0;i--){
+            rightSum[i] = rightSum[i+1]+nums[i];
+        }
+    }
+
+
+    int pivotIndex(vector<int>& nums) {
+        int size = nums.size();
+
+        if(size == 0){ // Corner Case
+            return -1;
+        }
+
+        vector<int> leftSum(size),rightSum(size);
+        populateLeftSum(leftSum , nums);
+        populateRightSum(rightSum , nums);
+
+        for(int i=0;i<size;i++){
+            int left = 0 ,right = 0;
+
+            if(i>0){
+                left = leftSum[i-1];
+            }
+
+            if(i+1 < size){
+                right = rightSum[i+1];
+            }
+
+            if(left == right){
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+
+
