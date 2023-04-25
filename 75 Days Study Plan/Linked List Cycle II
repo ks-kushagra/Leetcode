@@ -1,0 +1,66 @@
+Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, 
+pos is used to denote the index of the node that tail's next pointer is connected to (0-indexed). It is -1 if there is no cycle. Note that pos is not
+passed as a parameter.
+
+Do not modify the linked list.
+
+
+
+Input: head = [3,2,0,-4], pos = 1
+Output: tail connects to node index 1
+Explanation: There is a cycle in the linked list, where tail connects to the second node.
+
+Input: head = [1,2], pos = 0
+Output: tail connects to node index 0
+Explanation: There is a cycle in the linked list, where tail connects to the first node.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Detect loop in a linked list using Floyd’s Cycle-Finding Algorithm:
+This algorithm is used to find a loop in a linked list. It uses two pointers one moving twice as fast as the other one. The faster one is called the faster pointer and the other one is called the slow pointer.
+
+Follow the steps below to solve the problem:
+
+Traverse linked list using two pointers.
+Move one pointer(slow_p) by one and another pointer(fast_p) by two.
+If these pointers meet at the same node then there is a loop. If pointers do not meet then the linked list doesn’t have a loop.
+
+Then , move headand slow pointer together until they meet.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(head == NULL || head->next == NULL){
+            return NULL;
+        }
+        ListNode *p=head, *q=head;
+        while(q!=NULL && q->next!=NULL){
+            p=p->next;
+            q=q->next->next;
+
+            if(p == q){
+                break;
+            }
+        }
+
+        if(q==NULL || q->next == NULL) return NULL;
+
+        while(head != p){
+            head=head->next;
+            p=p->next;
+        }
+        return head;
+    }
+};
